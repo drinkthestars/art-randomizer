@@ -1,0 +1,3 @@
+include ':dateplanner-uitoolkit', ':dateplanner-compose', ':common'
+
+rootProject.name='virtual-date-planner'
