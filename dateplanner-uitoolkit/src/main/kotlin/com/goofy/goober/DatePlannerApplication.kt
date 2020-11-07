@@ -18,6 +18,10 @@ class DatePlannerApplication : Application() {
 
     private val appModule = module {
 
+        factory<CoroutineScope> { GlobalScope }
+
+        factory { ApplicationCoroutineScope(globalScope = get()) }
+
         factory { DatePlannerScreenStates() }
 
         factory { DatePlannerUiIntentConsumerFactory(applicationCoroutineScope = get()) }

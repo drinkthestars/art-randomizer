@@ -16,6 +16,10 @@ import org.koin.dsl.module
 class DatePlannerApplication : Application() {
 
     private val appModule = module {
+        // TODO: Use qualifier
+        factory<CoroutineScope> { GlobalScope }
+
+        factory { ApplicationCoroutineScope(globalScope = get()) }
 
         factory { DatePlannerUiIntentConsumerFactory(applicationCoroutineScope = get()) }
 
