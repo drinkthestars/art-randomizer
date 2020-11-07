@@ -8,13 +8,13 @@ import com.goofy.goober.R
 import com.goofy.goober.ui.DatePlannerRenderer
 import com.goofy.goober.ui.navigation.NavRouter
 import com.goofy.goober.ui.state.FragmentStateProvider
-import com.goofy.goober.ui.state.PizzaChildFragmentStates
+import com.goofy.goober.ui.state.DatePlannerChildFragmentStates
 import com.goofy.goober.ui.viewmodel.DatePlannerViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class DatePlannerActivity : AppCompatActivity(), FragmentStateProvider<PizzaChildFragmentStates> {
+class DatePlannerActivity : AppCompatActivity(), FragmentStateProvider<DatePlannerChildFragmentStates> {
 
     private val viewModel: DatePlannerViewModel by viewModel()
 
@@ -39,7 +39,7 @@ class DatePlannerActivity : AppCompatActivity(), FragmentStateProvider<PizzaChil
             }.launchIn(lifecycleScope)
     }
 
-    override fun provideFragmentStates(): PizzaChildFragmentStates {
+    override fun provideFragmentStates(): DatePlannerChildFragmentStates {
         return viewModel.screenStates
     }
 }
