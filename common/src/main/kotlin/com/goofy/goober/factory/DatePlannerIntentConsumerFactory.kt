@@ -22,18 +22,18 @@ class DatePlannerUiIntentConsumerFactory(
 
     init {
         applicationCoroutineScope.launch {
-            channel.consumeEach { pizzaTransition ->
+            channel.consumeEach { datePlannerTransition ->
                 Log.d(
                     "ActionConsumerFactory",
-                    "Got ${pizzaTransition.intent.javaClass.simpleName} intent"
+                    "Got ${datePlannerTransition.intent.javaClass.simpleName} intent"
                 )
             }
         }
     }
 
     fun create(): (Transition) -> Unit {
-        return { pizzaTransition ->
-            applicationCoroutineScope.launch { channel.send(pizzaTransition) }
+        return { datePlannerTransition ->
+            applicationCoroutineScope.launch { channel.send(datePlannerTransition) }
         }
     }
 }
