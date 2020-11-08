@@ -8,11 +8,9 @@
 
         <import type="com.goofy.goober.ui.view.QuestionView" />
 
-        <import type="androidx.lifecycle.LiveData" />
-
         <variable
             name="questionViewState"
-            type="LiveData&lt;QuestionView.State>" />
+            type="QuestionView.State" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -5,15 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import com.goofy.goober.databinding.EndFragmentBinding
 import com.goofy.goober.ui.state.bindState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class EndFragment : Fragment() {
 
-    // TODO: Eventually replace with StateFlow
     interface FragmentState {
-        fun endState(): LiveData<State>
+        fun endState(): StateFlow<State>
     }
 
     private val fragmentState: FragmentState by bindState()
@@ -26,8 +30,9 @@ class EndFragment : Fragment() {
         return EndFragmentBinding
             .inflate(LayoutInflater.from(context), container, false)
             .apply {
-                lifecycleOwner = viewLifecycleOwner
-                state = fragmentState.endState()
+                fragmentState.endState()
+                    .onEach { state = it }
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
             }
             .root
     }

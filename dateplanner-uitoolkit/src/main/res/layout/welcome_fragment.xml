@@ -7,13 +7,11 @@
 
         <import type="com.goofy.goober.ui.fragment.WelcomeFragment.State" />
 
-        <import type="androidx.lifecycle.LiveData" />
-
         <import type="android.view.View" />
 
         <variable
             name="state"
-            type="LiveData&lt;State>" />
+            type="State" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -8,11 +8,9 @@
 
         <import type="com.goofy.goober.ui.fragment.EndFragment.State" />
 
-        <import type="androidx.lifecycle.LiveData" />
-
         <variable
             name="state"
-            type="LiveData&lt;State>" />
+            type="State" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
