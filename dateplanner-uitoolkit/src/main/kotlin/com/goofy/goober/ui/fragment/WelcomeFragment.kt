@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.goofy.goober.databinding.WelcomeFragmentBinding
 import com.goofy.goober.ui.state.bindState
+import com.goofy.goober.ui.util.activityArgs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -20,7 +21,7 @@ class WelcomeFragment : Fragment() {
         fun welcomeState(): StateFlow<State>
     }
 
-    private val fragmentState: FragmentState by bindState()
+    private val fragmentState by activityArgs<FragmentState>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

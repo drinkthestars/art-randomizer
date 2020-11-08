@@ -3,21 +3,20 @@ package com.goofy.goober.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.goofy.goober.R
-import com.goofy.goober.ui.DatePlannerRenderer
 import com.goofy.goober.ui.navigation.NavRouter
-import com.goofy.goober.ui.state.FragmentStateProvider
-import com.goofy.goober.ui.state.DatePlannerChildFragmentStates
+import com.goofy.goober.ui.viewmodel.DatePlannerNavArgsViewModel
 import com.goofy.goober.ui.viewmodel.DatePlannerViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class DatePlannerActivity : AppCompatActivity(), FragmentStateProvider<DatePlannerChildFragmentStates> {
+class DatePlannerActivity : AppCompatActivity() {
 
     private val viewModel: DatePlannerViewModel by viewModel()
-
+    private val navArgsViewModel: DatePlannerNavArgsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,21 +24,21 @@ class DatePlannerActivity : AppCompatActivity(), FragmentStateProvider<DatePlann
         setContentView(R.layout.main_activity)
 
         val navRouter = NavRouter(
-            navController = findNavController(this@DatePlannerActivity, R.id.navHostFragment),
-            viewModel = viewModel
+            navController = navController(),
+            navArgsViewModel = navArgsViewModel
         )
-
-        val pizzaRenderer = DatePlannerRenderer(navRouter)
 
         viewModel.state
             .onEach { state ->
-                pizzaRenderer.render(state) { intent ->
+                navRouter.route(state) { intent ->
                     viewModel.consumeIntent(intent)
                 }
             }.launchIn(lifecycleScope)
     }
 
-    override fun provideFragmentStates(): DatePlannerChildFragmentStates {
-        return viewModel.screenStates
+    private fun navController(): NavController {
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.navHostFragment) as NavHostFragment
+        return navHostFragment.navController
     }
 }
