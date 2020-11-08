@@ -6,17 +6,26 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.goofy.goober.R
+import com.goofy.goober.model.DatePlannerIntent
 import com.goofy.goober.ui.navigation.NavRouter
+import com.goofy.goober.ui.state.BackButtonPressHandler
 import com.goofy.goober.ui.viewmodel.DatePlannerNavArgsViewModel
 import com.goofy.goober.ui.viewmodel.DatePlannerViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 
+private val BACK_BUTTON_ACTION = DatePlannerIntent.GoBackToPrevious
+
 class DatePlannerActivity : AppCompatActivity() {
 
     private val viewModel: DatePlannerViewModel by viewModel()
     private val navArgsViewModel: DatePlannerNavArgsViewModel by viewModel()
+    private val backButtonPressHandler = object : BackButtonPressHandler {
+        override fun onBackPress() {
+            viewModel.consumeIntent(BACK_BUTTON_ACTION)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +39,11 @@ class DatePlannerActivity : AppCompatActivity() {
 
         viewModel.state
             .onEach { state ->
-                navRouter.route(state) { intent ->
+                navRouter.route(
+                    datePlannerState = state,
+                    backButtonPressHandler = backButtonPressHandler,
+                    onExit = { this.finish() }
+                ) { intent ->
                     viewModel.consumeIntent(intent)
                 }
             }.launchIn(lifecycleScope)

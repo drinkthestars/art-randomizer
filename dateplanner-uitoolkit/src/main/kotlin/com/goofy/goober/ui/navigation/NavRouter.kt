@@ -9,6 +9,7 @@ import com.goofy.goober.model.Question
 import com.goofy.goober.model.intent
 import com.goofy.goober.ui.fragment.EndFragment
 import com.goofy.goober.ui.fragment.WelcomeFragment
+import com.goofy.goober.ui.state.BackButtonPressHandler
 import com.goofy.goober.ui.view.QuestionView
 import com.goofy.goober.ui.viewmodel.DatePlannerNavArgsViewModel
 
@@ -16,21 +17,27 @@ internal class NavRouter(
     private val navController: NavController,
     private val navArgsViewModel: DatePlannerNavArgsViewModel
 ) {
-    // TODO: Handle Back Press
     fun route(
         datePlannerState: DatePlannerState,
+        backButtonPressHandler: BackButtonPressHandler,
+        onExit: () -> Unit,
         onIntent: (DatePlannerIntent) -> Unit
     ) {
-        datePlannerState.routeInternal(onIntent)
+        datePlannerState.routeInternal(backButtonPressHandler, onIntent, onExit)
     }
 
-    private fun DatePlannerState.routeInternal(onIntent: (DatePlannerIntent) -> Unit) {
+    private fun DatePlannerState.routeInternal(
+        backButtonPressHandler: BackButtonPressHandler,
+        onIntent: (DatePlannerIntent) -> Unit,
+        onExit: () -> Unit
+    ) {
         when (this) {
             DatePlannerState.Loading -> {
                 val screenState = WelcomeFragment.State(
                     welcomeVisibility = View.GONE,
                     progressVisibility = View.VISIBLE,
-                    onStartClick = { }
+                    onStartClick = { },
+                    backButtonPressHandler = backButtonPressHandler
                 )
                 with(navController) {
                     navigate(R.id.welcomeFragment)
@@ -49,7 +56,8 @@ internal class NavRouter(
                                 question = Question.firstQuestion
                             )
                         )
-                    }
+                    },
+                    backButtonPressHandler = backButtonPressHandler
                 )
                 with(navController) {
                     navigate(R.id.welcomeFragment)
@@ -60,7 +68,8 @@ internal class NavRouter(
             is DatePlannerState.StillCustomizing -> {
                 val screenState = QuestionView.State(
                     question = this.currentQuestion,
-                    clickListener = { text -> onIntent(this.currentQuestion.intent(choice = text)) }
+                    clickListener = { text -> onIntent(this.currentQuestion.intent(choice = text)) },
+                    backButtonPressHandler = backButtonPressHandler
                 )
                 with(navController) {
                     if (currentDestination?.id == R.id.welcomeFragment) {
@@ -76,6 +85,10 @@ internal class NavRouter(
                     navigate(R.id.action_questionFragment_to_endFragment)
                     navArgsViewModel.updateEndState(screenState)
                 }
+            }
+
+            DatePlannerState.Exited -> {
+                onExit()
             }
         }
     }
