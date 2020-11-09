@@ -12,4 +12,6 @@ sealed class DatePlannerIntent {
     ) : DatePlannerIntent()
 
     object StartOver : DatePlannerIntent()
+
+    object GoBackToPrevious : DatePlannerIntent()
 }

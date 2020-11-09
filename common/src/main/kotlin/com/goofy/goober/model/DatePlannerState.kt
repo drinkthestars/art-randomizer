@@ -11,6 +11,7 @@ sealed class DatePlannerState {
         override fun reduce(intent: DatePlannerIntent): DatePlannerState {
             return when(intent) {
                 ShowWelcome -> Welcome
+                GoBackToPrevious -> Exited
 
                 StartOver,
                 is ContinueCustomizing,
@@ -26,6 +27,7 @@ sealed class DatePlannerState {
                     choicesMadeSoFar = emptyList(),
                     currentQuestion = intent.question
                 )
+                GoBackToPrevious -> Exited
 
                 StartOver,
                 ShowWelcome,
@@ -53,6 +55,7 @@ sealed class DatePlannerState {
                     val allChoices = choicesMadeSoFar + intent.lastChoice
                     FinishedCustomizing(allChoices.makeAnswer())
                 }
+                GoBackToPrevious -> Welcome
 
                 StartOver,
                 ShowWelcome -> this
@@ -64,8 +67,21 @@ sealed class DatePlannerState {
         override  fun reduce(intent: DatePlannerIntent): DatePlannerState {
             return when(intent) {
                 StartOver -> Welcome
+                GoBackToPrevious -> Exited
 
                 ShowWelcome,
+                is ContinueCustomizing,
+                is FinishCustomizing -> this
+            }
+        }
+    }
+
+    object Exited : DatePlannerState() {
+        override fun reduce(intent: DatePlannerIntent): DatePlannerState {
+            return when (intent) {
+                StartOver,
+                ShowWelcome,
+                GoBackToPrevious,
                 is ContinueCustomizing,
                 is FinishCustomizing -> this
             }

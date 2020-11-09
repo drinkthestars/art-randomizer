@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import com.goofy.goober.R
 import com.goofy.goober.model.Question
+import com.goofy.goober.ui.state.BackButtonPressHandler
 
 class QuestionView(
     context: Context,
@@ -39,6 +40,7 @@ class QuestionView(
 
     data class State(
         val question: Question,
-        val clickListener: (String) -> Unit
+        val clickListener: (String) -> Unit,
+        val backButtonPressHandler: BackButtonPressHandler? = null
     )
 }
