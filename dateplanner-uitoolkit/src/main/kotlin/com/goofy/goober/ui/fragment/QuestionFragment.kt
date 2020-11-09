@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.goofy.goober.databinding.QuestionFragmentBinding
 import com.goofy.goober.ui.state.bindState
+import com.goofy.goober.ui.util.activityArgs
 import com.goofy.goober.ui.view.QuestionView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +22,7 @@ class QuestionFragment : Fragment() {
         fun questionState(): StateFlow<QuestionView.State>
     }
 
-    private val fragmentState: FragmentState by bindState()
+    private val fragmentState by activityArgs<FragmentState>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

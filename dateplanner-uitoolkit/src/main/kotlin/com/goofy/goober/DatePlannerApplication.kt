@@ -3,8 +3,8 @@ package com.goofy.goober
 import android.app.Application
 import com.goofy.goober.factory.DatePlannerUiIntentConsumerFactory
 import com.goofy.goober.interactor.DatePlannerInteractor
-import com.goofy.goober.ui.state.DatePlannerScreenStates
 import com.goofy.goober.model.DatePlannerUi
+import com.goofy.goober.ui.viewmodel.DatePlannerNavArgsViewModel
 import com.goofy.goober.ui.viewmodel.DatePlannerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -22,8 +22,6 @@ class DatePlannerApplication : Application() {
 
         factory { ApplicationCoroutineScope(globalScope = get()) }
 
-        factory { DatePlannerScreenStates() }
-
         factory { DatePlannerUiIntentConsumerFactory(applicationCoroutineScope = get()) }
 
         factory { DatePlannerInteractor() }
@@ -33,9 +31,11 @@ class DatePlannerApplication : Application() {
         viewModel {
             DatePlannerViewModel(
                 datePlannerUi = get(),
-                datePlannerInteractor = get(),
-                screenStates = get()
+                datePlannerInteractor = get()
             )
+        }
+        viewModel {
+            DatePlannerNavArgsViewModel()
         }
     }
 
