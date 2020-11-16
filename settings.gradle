@@ -1,3 +1,3 @@
-include ':dateplanner-uitoolkit', ':dateplanner-compose', ':common'
+include ':art-uitoolkit', ':art-compose', ':common', ':api'
 
-rootProject.name='virtual-date-planner'
+rootProject.name='art-randomizer'

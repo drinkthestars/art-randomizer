@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.goofy.goober.androidview.fragment.NavGraphStartFragment"
+        android:label="NavGraphStartFragment"/>
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.goofy.goober.androidview.fragment.WelcomeFragment"
+        android:label="WelcomeFragment">
+        <action
+            android:id="@+id/action_welcomeFragment_to_chooserFragment"
+            app:destination="@id/chooserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooserFragment"
+        android:name="com.goofy.goober.androidview.fragment.ChooserFragment"
+        android:label="ChooserFragment" />
+</navigation>

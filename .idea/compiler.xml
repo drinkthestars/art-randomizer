@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="art-randomizer.art-compose" target="11" />
+      <module name="art-randomizer.art-uitoolkit" target="11" />
+      <module name="art-randomizer.common" target="11" />
+      <module name="virtual-date-planner.common" target="11" />
+      <module name="virtual-date-planner.dateplanner-compose" target="11" />
+      <module name="virtual-date-planner.dateplanner-uitoolkit" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
