@@ -31,8 +31,8 @@ internal val location = listOf(
 internal val contains = listOf(
     "flowers",
     "blue",
-    "sun",
-    "people"
+    "yellow",
+    "plants"
 )
 internal val century = listOf(
     "1600",

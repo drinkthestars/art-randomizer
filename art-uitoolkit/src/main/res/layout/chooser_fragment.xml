@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <import type="com.goofy.goober.androidview.view.ChooserView" />
         <import type="com.goofy.goober.model.ImageLoadState" />
+        <import type="android.view.View" />
 
         <variable
             name="questionContent"
@@ -15,6 +15,9 @@
         <variable
             name="chooserState"
             type="ChooserView.State" />
+        <variable
+            name="imageLoadProps"
+            type="View.OnClickListener" />
         <variable
             name="imageLoadState"
             type="ImageLoadState" />
@@ -45,13 +48,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/question"
-            app:state="@{chooserState}" />
-
+            app:state="@{chooserState}"
+            />
         <com.goofy.goober.androidview.view.EndImageView
             android:id="@+id/imageContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            app:props="@{imageLoadProps}"
             app:state="@{imageLoadState}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -17,7 +17,7 @@ data class ChooserScreenState(
                     imageLoadState = ImageLoadState(
                         isLoading = false,
                         imageUrl = intent.image.mainUrl,
-                        title = "${intent.image.title} by ${intent.image.artist}"
+                        title = title(intent)
                     )
                 )
             }
@@ -34,7 +34,16 @@ data class ChooserScreenState(
                     )
                 )
             }
+            is ChooserIntent.StartOver -> ChooserScreenState(questionState = QuestionsState())
             is ChooserIntent.LoadNext -> this
+        }
+    }
+
+    private fun title(intent: ChooserIntent.ShowImage): String {
+        return if (intent.image.artist.isNotBlank()) {
+            "${intent.image.title} by ${intent.image.artist}"
+        } else {
+            intent.image.title
         }
     }
 }

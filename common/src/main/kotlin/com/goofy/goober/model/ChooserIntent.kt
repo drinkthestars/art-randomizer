@@ -27,4 +27,6 @@ sealed class ChooserIntent {
         val newChoices: List<String>,
         val newQuestion: Question
     ) : ChooserIntent()
+
+    object StartOver: ChooserIntent()
 }

@@ -8,20 +8,34 @@
 
         <ImageView
             android:id="@+id/image"
-            android:scaleType="centerCrop"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_height="200dp" />
+            android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/title"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:background="#70FFFFFF"
             android:layout_gravity="center|bottom"
-            android:gravity="start|center_vertical"
-            android:paddingStart="16dp"
-            android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginEnd="80dp"
+                android:gravity="start|center_vertical"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+            <ImageView
+                android:id="@+id/refresh"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end|center_vertical"
+                android:src="@drawable/ic_refresh"/>
+        </FrameLayout>
 
         <ProgressBar
             android:id="@+id/loading"
