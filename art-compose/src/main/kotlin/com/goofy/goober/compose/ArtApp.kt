@@ -3,51 +3,40 @@ package com.goofy.goober.compose
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.goofy.goober.model.ArtIntent
 import com.goofy.goober.model.ArtState
-import com.goofy.goober.model.Question
+import com.goofy.goober.model.ChooserIntent
+import com.goofy.goober.model.ImageLoadState
+import com.goofy.goober.model.QuestionsState
+import com.goofy.goober.viewmodel.ChooserViewModel
 
 @Composable
-internal fun ArtApp(state: ArtState, onIntent: (ArtIntent) -> Unit) {
+internal fun ArtApp(
+    chooserViewModel: ChooserViewModel,
+    state: ArtState,
+    onIntent: (ArtIntent) -> Unit
+) {
     Crossfade(state) {
         Surface(color = MaterialTheme.colors.background) {
             when (state) {
                 is ArtState.Welcome -> WelcomeScreen {
-                    onIntent(
-                        ArtIntent.ShowNext(
-                            newQuestion = Question.firstQuestion,
-                            newChoices = emptyList()
-                        )
-                    )
+                    onIntent(ArtIntent.ShowChooser)
                 }
-                is ArtState.ShowingQuestion -> StillCustomizingScreen(
-                    question = state.currentQuestion,
-                    onChoiceClick = {
-                        onIntent(
-                            ArtIntent.LoadNext(
-                                currentQuestion = state.currentQuestion,
-                                newChoice = it,
-                                choicesMadeSoFar = state.choicesMadeSoFar
-                            )
-                        )
-                    }
-                )
-                is ArtState.FinishedCustomizing -> FinishedCustomizingScreen(
-                    result = state.result,
-                    onRestart = { onIntent(ArtIntent.StartOver) }
-                )
+                is ArtState.Chooser -> ChooserScreen(chooserViewModel)
             }
         }
     }
@@ -55,7 +44,11 @@ internal fun ArtApp(state: ArtState, onIntent: (ArtIntent) -> Unit) {
 
 @Composable
 internal fun WelcomeScreen(onIntent: (String) -> Unit) {
-    FadeInCenterContentColumn {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         OptionButton(
             text = "Start",
             onClick = onIntent
@@ -64,39 +57,67 @@ internal fun WelcomeScreen(onIntent: (String) -> Unit) {
 }
 
 @Composable
-internal fun StillCustomizingScreen(
-    question: Question,
-    onChoiceClick: (String) -> Unit
+internal fun ChooserScreen(
+    viewModel: ChooserViewModel
 ) {
+    val state by viewModel.state.collectAsState()
     val typography = MaterialTheme.typography
-    FadeInCenterContentColumn {
-        WrapContentBox { Text(text = question.value, style = typography.h5) }
-        Spacer(Modifier.preferredHeight(20.dp))
-        Column(
-            modifier = Modifier.wrapContentSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            question.options.values.forEach { OptionButtonWithMargin(it, onChoiceClick) }
+    val questionsState = state.questionState
+    val imageLoadState = state.imageLoadState
+    if (questionsState != null) {
+        with(questionsState) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                WrapContentBox { Text(text = question.value, style = typography.h5) }
+                Spacer(Modifier.preferredHeight(20.dp))
+                Column(
+                    modifier = Modifier.wrapContentSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    question.options.values.forEach {
+                        OptionButtonWithMargin(it) { choice ->
+                            viewModel.consumeIntent(loadNext(questionsState, choice))
+                        }
+                    }
+                }
+            }
         }
+    } else if (imageLoadState != null) {
+        ImageDetails(imageLoadState, onStartOver = {
+            viewModel.consumeIntent(ChooserIntent.StartOver)
+        })
     }
 }
 
 @Composable
-internal fun FinishedCustomizingScreen(
-    result: String,
-    onRestart: (String) -> Unit
+internal fun ImageDetails(
+    imageLoadState: ImageLoadState,
+    onStartOver: () -> Unit
 ) {
-    FadeInCenterContentColumn {
-        Text(
-            text = result,
-            modifier = Modifier.padding(horizontal = 30.dp),
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.preferredHeight(16.dp))
-        OptionButton(
-            text = "Start Over",
-            onClick = onRestart
-        )
+    val imageUrl = imageLoadState.imageUrl
+    when {
+        imageUrl != null -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                ImageContent(imageUrl)
+                ImageTitleContent(imageLoadState.title, onStartOver)
+            }
+        }
+        imageLoadState.isLoading -> ImageLoadInProgress()
+        imageLoadState.hasError -> ImageLoadError()
     }
+}
+
+private fun loadNext(
+    questionState: QuestionsState,
+    choice: String
+): ChooserIntent.LoadNext {
+    return ChooserIntent.LoadNext(
+        choicesSoFar = questionState.choicesSoFar,
+        currentQuestion = questionState.question,
+        newChoice = choice
+    )
 }

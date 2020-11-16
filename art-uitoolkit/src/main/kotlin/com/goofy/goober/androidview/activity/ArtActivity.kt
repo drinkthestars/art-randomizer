@@ -13,7 +13,7 @@ import com.goofy.goober.viewmodel.ArtViewModel
 import kotlinx.coroutines.flow.collect
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class ArtPlannerActivity : AppCompatActivity() {
+class ArtActivity : AppCompatActivity() {
 
     private val viewModel: ArtViewModel by viewModel()
     private val navArgsViewModel: NavArgsViewModel by viewModel()
