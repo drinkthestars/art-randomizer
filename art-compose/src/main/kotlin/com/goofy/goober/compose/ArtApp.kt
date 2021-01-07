@@ -33,9 +33,7 @@ internal fun ArtApp(
     Crossfade(state) {
         Surface(color = MaterialTheme.colors.background) {
             when (state) {
-                is ArtState.Welcome -> WelcomeScreen {
-                    onIntent(ArtIntent.ShowChooser)
-                }
+                is ArtState.Welcome -> WelcomeScreen { onIntent(ArtIntent.ShowChooser) }
                 is ArtState.Chooser -> ChooserScreen(chooserViewModel)
             }
         }
