@@ -1,16 +1,16 @@
 package com.goofy.goober.compose
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -70,7 +70,7 @@ internal fun ChooserScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 WrapContentBox { Text(text = question.value, style = typography.h5) }
-                Spacer(Modifier.preferredHeight(20.dp))
+                Spacer(Modifier.height(20.dp))
                 Column(
                     modifier = Modifier.wrapContentSize(),
                     verticalArrangement = Arrangement.Center,
@@ -100,7 +100,7 @@ internal fun ImageDetails(
     when {
         imageUrl != null -> {
             Box(modifier = Modifier.fillMaxSize()) {
-                ImageContent(imageUrl)
+                ImageContent(imageUrl, imageLoadState.title)
                 ImageTitleContent(imageLoadState.title, onStartOver)
             }
         }

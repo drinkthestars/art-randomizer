@@ -2,10 +2,10 @@ package com.goofy.goober.compose.activity
 
 import android.os.Bundle
 import android.view.Window
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.setContent
 import com.goofy.goober.compose.ArtApp
 import com.goofy.goober.compose.theme.ArtAppTheme
 import com.goofy.goober.viewmodel.ArtViewModel

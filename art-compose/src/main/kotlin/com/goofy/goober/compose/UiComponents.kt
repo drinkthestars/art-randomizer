@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Button
@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector.Companion
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,12 +30,13 @@ import com.goofy.goober.common.R
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
-internal fun ImageContent(imageUrl: String) {
+internal fun ImageContent(imageUrl: String, title: String) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         CoilImage(
+            contentDescription = title,
             contentScale = ContentScale.Crop,
             data = imageUrl,
             fadeIn = true,
@@ -62,10 +64,11 @@ internal fun BoxScope.ImageTitleContent(title: String, onStartOver: () -> Unit) 
             modifier = Modifier.padding(end = 80.dp)
         )
         Image(
-            modifier = Modifier.preferredSize(40.dp)
+            modifier = Modifier.size(40.dp)
                 .align(Alignment.CenterEnd)
                 .clickable(onClick = onStartOver),
-            imageVector = vectorResource(R.drawable.ic_refresh)
+            contentDescription = title,
+            imageVector = Companion.vectorResource(R.drawable.ic_refresh)
         )
     }
 }
@@ -79,7 +82,7 @@ internal fun ImageLoadInProgress(modifier: Modifier = Modifier) {
         Text(
             modifier = modifier
                 .fillMaxWidth()
-                .preferredHeight(50.dp),
+                .height(50.dp),
             textAlign = TextAlign.Center,
             text = "Loading..."
         )
@@ -91,7 +94,7 @@ internal fun ImageLoadError() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .preferredHeight(50.dp),
+            .height(50.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(text = ":( Couldn't load")
@@ -115,7 +118,7 @@ internal fun OptionButtonWithMargin(
 ) {
     Column {
         OptionButton(text, onClick)
-        Spacer(Modifier.preferredHeight(10.dp))
+        Spacer(Modifier.height(10.dp))
     }
 }
 
